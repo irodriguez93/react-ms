@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import classes from "./App.css";
 import Persons from "../components/Persons/Persons";
 import Cockpit from "../components/Cockpit/Cockpit";
+import WithClass from "../hoc/WithClass";
 
 class App extends Component {
   constructor(props) {
@@ -17,6 +18,7 @@ class App extends Component {
     ],
     otherState: "some other value",
     showPersons: false,
+    showCockpit: true,
   };
 
   static getDerivedStateFromProps(props, state) {
@@ -72,6 +74,11 @@ class App extends Component {
     this.setState({ showPersons: !doesShow });
   };
 
+  handleCockPit = () => {
+    const doesShow = this.state.showCockpit;
+    this.setState({ showCockpit: !doesShow });
+  };
+
   render() {
     console.log("[App.js] render");
     let persons = null;
@@ -89,15 +96,18 @@ class App extends Component {
     }
 
     return (
-      <div className={classes.App}>
-        <Cockpit
-          showPersons={this.state.showPersons}
-          persons={this.state.persons}
-          clicked={this.togglePersonsHandler}
-          appTitle={this.props.appTitle}
-        ></Cockpit>
+      <WithClass classes={classes.App}>
+        <button onClick={this.handleCockPit}>Remove Cockpit</button>
+        {this.state.showCockpit ? (
+          <Cockpit
+            showPersons={this.state.showPersons}
+            personsLength={this.state.persons.length}
+            clicked={this.togglePersonsHandler}
+            appTitle={this.props.appTitle}
+          ></Cockpit>
+        ) : null}
         {persons}
-      </div>
+      </WithClass>
     );
     // return React.createElement('div', {className: 'App'}, React.createElement('h1', null, 'Does this work now?'));
   }
