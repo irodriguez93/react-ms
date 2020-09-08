@@ -3,7 +3,7 @@ import React, { Component } from "react";
 import classes from "./App.css";
 import Persons from "../components/Persons/Persons";
 import Cockpit from "../components/Cockpit/Cockpit";
-import withClass from "../hoc/WithClass";
+import WithClass from "../hoc/WithClass";
 import Aux from "../hoc/Aux";
 
 class App extends Component {
@@ -21,6 +21,7 @@ class App extends Component {
     otherState: "some other value",
     showPersons: false,
     showCockpit: true,
+    changeCounter: 0,
   };
 
   static getDerivedStateFromProps(props, state) {
@@ -61,7 +62,12 @@ class App extends Component {
     const persons = [...this.state.persons];
     persons[personIndex] = person;
 
-    this.setState({ persons: persons });
+    this.setState((prevState, props) => {
+      return {
+        persons: persons,
+        changeCounter: prevState.changeCounter + 1,
+      };
+    });
   };
 
   deletePersonHandler = (personIndex) => {
@@ -114,4 +120,4 @@ class App extends Component {
   }
 }
 
-export default withClass(App, classes.App);
+export default WithClass(App, classes.App);
